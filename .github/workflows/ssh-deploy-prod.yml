@@ -1,0 +1,42 @@
+name: SSH Deployment
+
+on:
+  workflow_call:
+    secrets:
+      host:
+        required: true
+      key:
+        required: true
+      workdir:
+        required: true
+      script_env_sync:
+        required: true
+      docker_host:
+        required: true
+      docker_username:
+        required: true
+      docker_password:
+        required: true
+      image_name:
+        required: true
+
+jobs:
+  deploying:
+    runs-on: [self-hosted]
+    steps:
+      - name: Pull new image
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.host }}
+          key: ${{ secrets.key }}
+          username: ubuntu
+          script: |
+            docker login ${{ secrets.docker_host }} -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
+            docker pull ${{ secrets.image_name }}
+      - name: Rerun docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.host }}
+          key: ${{ secrets.key }}
+          username: ubuntu
+          script: cd ${{ secrets.workdir }} && docker-compose up -d
