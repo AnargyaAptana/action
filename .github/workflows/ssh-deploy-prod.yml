@@ -29,7 +29,7 @@ jobs:
         with:
           host: ${{ secrets.host }}
           key: ${{ secrets.key }}
-          username: ubuntu
+          username: dox
           script: |
             docker login ${{ secrets.docker_host }} -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
             docker pull ${{ secrets.image_name }}
@@ -38,5 +38,5 @@ jobs:
         with:
           host: ${{ secrets.host }}
           key: ${{ secrets.key }}
-          username: ubuntu
+          username: dox
           script: cd ${{ secrets.workdir }} && docker-compose up -d
