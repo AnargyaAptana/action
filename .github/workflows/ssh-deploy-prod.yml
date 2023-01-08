@@ -43,5 +43,6 @@ jobs:
         with:
           host: ${{ secrets.host }}
           key: ${{ secrets.key }}
-          username: dox
+          passphrase: ${{secrets.passphrase}}
+          username: ${{secrets.username}}
           script: cd ${{ secrets.workdir }} && docker-compose up -d
