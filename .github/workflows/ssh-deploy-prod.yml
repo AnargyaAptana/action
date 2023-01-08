@@ -19,6 +19,10 @@ on:
         required: true
       image_name:
         required: true
+      passphrase:
+        required: true
+      username:
+        required: true
 
 jobs:
   deploying:
@@ -29,7 +33,8 @@ jobs:
         with:
           host: ${{ secrets.host }}
           key: ${{ secrets.key }}
-          username: dox
+          passphrase: ${{secrets.passphrase}}
+          username: ${{secrets.passphrase}}
           script: |
             docker login ${{ secrets.docker_host }} -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
             docker pull ${{ secrets.image_name }}
