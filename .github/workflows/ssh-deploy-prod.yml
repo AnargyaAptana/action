@@ -28,6 +28,7 @@ jobs:
   deploying:
     runs-on: [self-hosted]
     steps:
+    
       - name: Pull new image
         uses: appleboy/ssh-action@master
         with:
