@@ -1,0 +1,40 @@
+name: API Docker Builder
+
+on:
+  workflow_call:
+    secrets:
+      image_name:
+        required: true
+      docker_reg_host:
+        required: true
+      docker_reg_username:
+        required: true
+      docker_reg_password:
+        required: true
+
+jobs:
+  building:
+    runs-on: [self-hosted]
+    steps:
+      - name: Check out Repo
+        uses: actions/checkout@v3
+      - name: Login to docker registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.docker_reg_host }}
+          username: ${{ secrets.docker_reg_username }}
+          password: ${{ secrets.docker_reg_password }}
+      - name: Build and Push
+        uses: docker/build-push-action@v3
+        with:
+          target: final-stage
+          context: .
+          push: true
+          tags: ${{ secrets.image_name }}
+
+  post-building:
+    runs-on: [self-hosted]
+    needs: [building]
+    steps:
+      - name: Cleaning up old images
+        run: docker image prune -a --force --filter "until=240h"
