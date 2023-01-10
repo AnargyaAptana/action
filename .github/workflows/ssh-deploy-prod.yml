@@ -46,4 +46,7 @@ jobs:
           key: ${{ secrets.key }}
           passphrase: ${{secrets.passphrase}}
           username: ${{secrets.username}}
-          script: cd ${{ secrets.workdir }} && doppler run -- docker-compose up -d
+          script: |
+            cd ${{ secrets.workdir }} 
+            source .bashrc
+            doppler run -- docker-compose up -d
